@@ -29,8 +29,9 @@ export const AuthProvider = ({ children }) => {
     return loggedUser;
   };
 
-  // REGISTER (UPDATED)
+  // REGISTER (FINAL CORRECT VERSION)
   const register = async (name, email, password, role, phone, address) => {
+    // Step 1: Create Auth user
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -45,6 +46,24 @@ export const AuthProvider = ({ children }) => {
     });
 
     if (error) throw error;
+
+    const userId = data.user.id;
+
+    // Step 2: Insert into profiles table
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert([
+        {
+          id: userId,
+          name,
+          email,
+          role,
+          phone,
+          address,
+        },
+      ]);
+
+    if (profileError) throw profileError;
 
     const newUser = {
       ...data.user,

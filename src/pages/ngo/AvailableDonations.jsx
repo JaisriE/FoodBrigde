@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Package, CheckCircle, TrendingUp, MapPin, Clock } from 'lucide-react';
+import { LayoutDashboard, Package, CheckCircle, TrendingUp, MapPin, Clock, Phone, User } from 'lucide-react';
 import DashboardLayout from '../../components/DashboardLayout';
 import Notification from '../../components/Notification';
 import { supabase } from '../../services/supabaseClient';
@@ -24,7 +24,13 @@ const AvailableDonations = () => {
   const fetchAvailableDonations = async () => {
     const { data, error } = await supabase
       .from('donations')
-      .select('*')
+      .select(`
+        *,
+        profiles (
+          name,
+          phone
+        )
+      `)
       .eq('status', 'available')
       .order('created_at', { ascending: false });
 
@@ -49,7 +55,7 @@ const AvailableDonations = () => {
       message: `Successfully accepted ${foodType} donation!`
     });
 
-    fetchAvailableDonations(); // refresh list
+    fetchAvailableDonations();
   };
 
   return (
@@ -78,18 +84,35 @@ const AvailableDonations = () => {
             </div>
 
             <div className="donation-card-body">
+
               <div className="donation-detail">
-                <Package size={18} color="#6b7280" />
-                <span>Donor ID: {donation.donor_id}</span>
+                <User size={18} color="#6b7280" />
+                <span>
+                  Donor: {donation.profiles?.name || 'Unknown'}
+                </span>
               </div>
+
+              <div className="donation-detail">
+                <Phone size={18} color="#6b7280" />
+                <span>
+                  Contact: {donation.profiles?.phone || 'Not provided'}
+                </span>
+              </div>
+
               <div className="donation-detail">
                 <MapPin size={18} color="#6b7280" />
-                <span>Location not provided</span>
+                <span>
+                  {donation.pickup_address || 'Location not provided'}
+                </span>
               </div>
+
               <div className="donation-detail">
                 <Clock size={18} color="#6b7280" />
-                <span>{new Date(donation.pickup_time).toLocaleString()}</span>
+                <span>
+                  {new Date(donation.pickup_time).toLocaleString()}
+                </span>
               </div>
+
             </div>
 
             <div className="donation-card-footer">

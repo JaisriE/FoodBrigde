@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutDashboard, Plus, Package, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, Plus, Package, TrendingUp, MapPin } from 'lucide-react';
 import DashboardLayout from '../../components/DashboardLayout';
 import Notification from '../../components/Notification';
 import { calculateEnvironmentalImpact } from '../../utils/calculations';
@@ -10,6 +10,7 @@ const AddDonation = () => {
   const [foodType, setFoodType] = useState('');
   const [quantity, setQuantity] = useState('');
   const [pickupTime, setPickupTime] = useState('');
+  const [pickupAddress, setPickupAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
   const [impactPreview, setImpactPreview] = useState(null);
@@ -35,7 +36,6 @@ const AddDonation = () => {
     e.preventDefault();
     setLoading(true);
 
-    // ✅ Get authenticated user directly from Supabase
     const {
       data: { user },
       error: userError,
@@ -49,11 +49,12 @@ const AddDonation = () => {
 
     const { error } = await supabase.from('donations').insert([
       {
-        donor_id: user.id, // must match auth.users.id
+        donor_id: user.id,
         donor_name: user.user_metadata?.name || 'Unknown',
         food_type: foodType,
         quantity: parseFloat(quantity),
         pickup_time: pickupTime,
+        pickup_address: pickupAddress,
         status: 'available'
       }
     ]);
@@ -73,6 +74,7 @@ const AddDonation = () => {
     setFoodType('');
     setQuantity('');
     setPickupTime('');
+    setPickupAddress('');
     setImpactPreview(null);
   };
 
@@ -125,6 +127,20 @@ const AddDonation = () => {
                 type="datetime-local"
                 value={pickupTime}
                 onChange={(e) => setPickupTime(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>
+                <MapPin size={16} style={{ marginRight: '6px' }} />
+                Pickup Address *
+              </label>
+              <input
+                type="text"
+                value={pickupAddress}
+                onChange={(e) => setPickupAddress(e.target.value)}
+                placeholder="Enter pickup location"
                 required
               />
             </div>
