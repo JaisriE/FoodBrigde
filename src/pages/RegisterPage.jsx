@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Leaf, Mail, Lock, User, UserCheck } from 'lucide-react';
+import { Leaf, Mail, Lock, User, UserCheck, Phone, MapPin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Notification from '../components/Notification';
 import './AuthPages.css';
@@ -12,6 +12,8 @@ const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
   const [role, setRole] = useState('donor');
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -19,7 +21,6 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ Password validation
     if (password.length < 8) {
       setNotification({
         type: 'error',
@@ -31,7 +32,14 @@ const RegisterPage = () => {
     setLoading(true);
 
     try {
-      const user = await register(name, email, password, role);
+      const user = await register(
+        name,
+        email,
+        password,
+        role,
+        phone,
+        address
+      );
 
       setNotification({
         type: 'success',
@@ -71,7 +79,7 @@ const RegisterPage = () => {
         <div className="auth-left">
           <div className="auth-branding">
             <Leaf size={48} color="#10b981" />
-            <h1>Join Us Today</h1>
+            <h1>Join Food Bridge</h1>
             <p>Register to start contributing to a sustainable future</p>
           </div>
         </div>
@@ -132,6 +140,36 @@ const RegisterPage = () => {
               </div>
 
               <div className="form-group">
+                <label htmlFor="phone">
+                  <Phone size={18} />
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter your phone number"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="address">
+                  <MapPin size={18} />
+                  Address
+                </label>
+                <input
+                  id="address"
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Enter your address"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="role">
                   <UserCheck size={18} />
                   Select Your Role
@@ -159,6 +197,7 @@ const RegisterPage = () => {
                   'Register'
                 )}
               </button>
+
             </form>
 
             <div className="auth-footer">

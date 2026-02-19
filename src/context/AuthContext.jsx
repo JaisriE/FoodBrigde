@@ -7,7 +7,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ added loading
+  const [loading, setLoading] = useState(true);
 
   // LOGIN
   const login = async (email, password) => {
@@ -21,14 +21,16 @@ export const AuthProvider = ({ children }) => {
     const loggedUser = {
       ...data.user,
       role: data.user.user_metadata?.role,
+      phone: data.user.user_metadata?.phone,
+      address: data.user.user_metadata?.address,
     };
 
     setUser(loggedUser);
     return loggedUser;
   };
 
-  // REGISTER
-  const register = async (name, email, password, role) => {
+  // REGISTER (UPDATED)
+  const register = async (name, email, password, role, phone, address) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -36,6 +38,8 @@ export const AuthProvider = ({ children }) => {
         data: {
           name,
           role,
+          phone,
+          address,
         },
       },
     });
@@ -45,6 +49,8 @@ export const AuthProvider = ({ children }) => {
     const newUser = {
       ...data.user,
       role,
+      phone,
+      address,
     };
 
     setUser(newUser);
@@ -57,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // ✅ FIXED SESSION HANDLING
+  // SESSION HANDLING
   useEffect(() => {
     const getSession = async () => {
       const { data } = await supabase.auth.getSession();
@@ -66,21 +72,24 @@ export const AuthProvider = ({ children }) => {
         setUser({
           ...data.session.user,
           role: data.session.user.user_metadata?.role,
+          phone: data.session.user.user_metadata?.phone,
+          address: data.session.user.user_metadata?.address,
         });
       }
 
-      setLoading(false); // ✅ stop loading after checking
+      setLoading(false);
     };
 
     getSession();
 
-    // 🔥 Listen for login/logout changes
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (session?.user) {
           setUser({
             ...session.user,
             role: session.user.user_metadata?.role,
+            phone: session.user.user_metadata?.phone,
+            address: session.user.user_metadata?.address,
           });
         } else {
           setUser(null);
