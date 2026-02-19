@@ -99,6 +99,7 @@ const AddDonation = () => {
         <div className="card form-card">
           <h3>Donation Details</h3>
           <form onSubmit={handleSubmit}>
+
             <div className="form-group">
               <label>Food Type *</label>
               <input
@@ -148,6 +149,7 @@ const AddDonation = () => {
             <button type="submit" className="btn-primary full-width" disabled={loading}>
               {loading ? 'Submitting...' : 'Submit Donation'}
             </button>
+
           </form>
         </div>
 
