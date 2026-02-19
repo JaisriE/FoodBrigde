@@ -8,6 +8,7 @@ import './AuthPages.css';
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,11 +18,25 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ Password validation
+    if (password.length < 8) {
+      setNotification({
+        type: 'error',
+        message: 'Password must be at least 8 characters long.'
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
       const user = await register(name, email, password, role);
-      setNotification({ type: 'success', message: 'Registration successful!' });
+
+      setNotification({
+        type: 'success',
+        message: 'Registration successful!'
+      });
 
       setTimeout(() => {
         if (user.role === 'donor') {
@@ -32,8 +47,12 @@ const RegisterPage = () => {
           navigate('/admin/dashboard');
         }
       }, 1000);
+
     } catch (error) {
-      setNotification({ type: 'error', message: 'Registration failed. Please try again.' });
+      setNotification({
+        type: 'error',
+        message: 'Registration failed. Please try again.'
+      });
       setLoading(false);
     }
   };
@@ -65,6 +84,7 @@ const RegisterPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
+
               <div className="form-group">
                 <label htmlFor="name">
                   <User size={18} />
@@ -105,7 +125,8 @@ const RegisterPage = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a strong password"
+                  placeholder="Minimum 8 characters"
+                  minLength={8}
                   required
                 />
               </div>
@@ -127,7 +148,11 @@ const RegisterPage = () => {
                 </select>
               </div>
 
-              <button type="submit" className="btn-primary full-width" disabled={loading}>
+              <button
+                type="submit"
+                className="btn-primary full-width"
+                disabled={loading}
+              >
                 {loading ? (
                   <div className="loading-spinner"></div>
                 ) : (
@@ -143,6 +168,7 @@ const RegisterPage = () => {
               </p>
               <Link to="/" className="auth-link">Back to Home</Link>
             </div>
+
           </div>
         </div>
       </div>

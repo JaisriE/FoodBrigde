@@ -18,7 +18,7 @@ const DashboardLayout = ({ children, menuItems }) => {
       <aside className="sidebar">
         <div className="sidebar-header">
           <Leaf size={32} color="#10b981" />
-          <h2>Smart Food</h2>
+          <h2>FoodBridge</h2>
         </div>
 
         <div className="user-info">

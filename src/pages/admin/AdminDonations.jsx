@@ -10,7 +10,7 @@ const AdminDonations = () => {
 
   const menuItems = [
     { path: '/admin/dashboard', label: 'Overview', icon: <LayoutDashboard size={20} /> },
-    { path: '/admin/users', label: 'Users', icon: <Users size={20} /> },
+   
     { path: '/admin/donations', label: 'Donations', icon: <Package size={20} /> },
     { path: '/admin/impact', label: 'Environmental Impact', icon: <TrendingUp size={20} /> }
   ];

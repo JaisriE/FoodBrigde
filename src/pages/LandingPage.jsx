@@ -58,7 +58,7 @@ const LandingPage = () => {
       {/* HERO SECTION */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Smart Food Waste Redistribution & Composting System</h1>
+          <h1>FoodBridge - Smart Food Waste Redistribution & Composting System</h1>
           <p className="hero-subtitle">
             Connecting food donors with NGOs to reduce waste, fight hunger, and
             protect our environment.
@@ -209,7 +209,7 @@ const LandingPage = () => {
         <div className="footer-content">
           <div className="footer-logo">
             <Leaf size={24} color="#10b981" />
-            <span>Smart Food Redistribution</span>
+            <span>FoodBridge – Connecting Surplus to Need</span>
           </div>
           <p>© 2026 Smart Food Redistribution System</p>
         </div>
