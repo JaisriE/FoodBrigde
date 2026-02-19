@@ -42,7 +42,7 @@ const LandingPage = () => {
       <header className="landing-header">
         <div className="logo">
           <Leaf size={32} color="#10b981" />
-          <span>Smart Food Redistribution</span>
+          <span>FoodBridge</span>
         </div>
 
         <div className="header-buttons">
