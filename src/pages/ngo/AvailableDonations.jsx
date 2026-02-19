@@ -22,47 +22,18 @@ const AvailableDonations = () => {
   }, []);
 
   const fetchAvailableDonations = async () => {
-    // Step 1: Get donations
-    const { data: donationData, error: donationError } = await supabase
+    const { data, error } = await supabase
       .from('donations')
       .select('*')
       .eq('status', 'available')
       .order('created_at', { ascending: false });
 
-    if (donationError) {
-      console.log(donationError);
+    if (error) {
+      console.log(error);
       return;
     }
 
-    if (!donationData || donationData.length === 0) {
-      setDonations([]);
-      return;
-    }
-
-    // Step 2: Get donor profiles
-    const donorIds = donationData.map(d => d.donor_id);
-
-    const { data: profileData, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, name, phone')
-      .in('id', donorIds);
-
-    if (profileError) {
-      console.log(profileError);
-      return;
-    }
-
-    // Step 3: Merge donations with profiles
-    const mergedData = donationData.map(donation => {
-      const profile = profileData?.find(p => p.id === donation.donor_id);
-      return {
-        ...donation,
-        donor_name: profile?.name || 'Unknown',
-        donor_phone: profile?.phone || 'Not provided'
-      };
-    });
-
-    setDonations(mergedData);
+    setDonations(data || []);
   };
 
   const handleAccept = async (id, foodType) => {
@@ -114,14 +85,14 @@ const AvailableDonations = () => {
               <div className="donation-detail">
                 <User size={18} color="#6b7280" />
                 <span>
-                  Donor: {donation.donor_name}
+                  Donor: {donation.donor_name || 'Unknown'}
                 </span>
               </div>
 
               <div className="donation-detail">
                 <Phone size={18} color="#6b7280" />
                 <span>
-                  Phone: {donation.donor_phone}
+                  Phone: {donation.donor_phone || 'Not provided'}
                 </span>
               </div>
 

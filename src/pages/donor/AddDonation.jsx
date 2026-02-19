@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutDashboard, Plus, Package, TrendingUp, MapPin } from 'lucide-react';
+import { LayoutDashboard, Plus, Package, TrendingUp, MapPin, Phone } from 'lucide-react';
 import DashboardLayout from '../../components/DashboardLayout';
 import Notification from '../../components/Notification';
 import { calculateEnvironmentalImpact } from '../../utils/calculations';
@@ -11,6 +11,7 @@ const AddDonation = () => {
   const [quantity, setQuantity] = useState('');
   const [pickupTime, setPickupTime] = useState('');
   const [pickupAddress, setPickupAddress] = useState('');
+  const [donorPhone, setDonorPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null);
   const [impactPreview, setImpactPreview] = useState(null);
@@ -51,6 +52,7 @@ const AddDonation = () => {
       {
         donor_id: user.id,
         donor_name: user.user_metadata?.name || 'Unknown',
+        donor_phone: donorPhone,
         food_type: foodType,
         quantity: parseFloat(quantity),
         pickup_time: pickupTime,
@@ -75,6 +77,7 @@ const AddDonation = () => {
     setQuantity('');
     setPickupTime('');
     setPickupAddress('');
+    setDonorPhone('');
     setImpactPreview(null);
   };
 
@@ -141,7 +144,20 @@ const AddDonation = () => {
                 type="text"
                 value={pickupAddress}
                 onChange={(e) => setPickupAddress(e.target.value)}
-                placeholder="Enter pickup location"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>
+                <Phone size={16} style={{ marginRight: '6px' }} />
+                Contact Phone *
+              </label>
+              <input
+                type="text"
+                value={donorPhone}
+                onChange={(e) => setDonorPhone(e.target.value)}
+                placeholder="Enter your contact number"
                 required
               />
             </div>
@@ -170,11 +186,6 @@ const AddDonation = () => {
               </div>
             </div>
 
-            <div className="impact-note">
-              <p>
-                <strong>Note:</strong> 1 kg food ≈ 2.5 kg CO2 + 0.5 kg methane prevented.
-              </p>
-            </div>
           </div>
         )}
       </div>
