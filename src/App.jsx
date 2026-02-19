@@ -16,7 +16,6 @@ import CollectedDonations from './pages/ngo/CollectedDonations';
 import NGOImpact from './pages/ngo/NGOImpact';
 
 import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminUsers from './pages/admin/AdminUsers';
 import AdminDonations from './pages/admin/AdminDonations';
 import AdminImpact from './pages/admin/AdminImpact';
 
@@ -130,14 +129,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/admin/users"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminUsers />
-          </ProtectedRoute>
-        }
-      />
+      
       <Route
         path="/admin/donations"
         element={
