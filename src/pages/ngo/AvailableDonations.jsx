@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Package, CheckCircle, TrendingUp, MapPin, Clock, Phone, User } from 'lucide-react';
+import { LayoutDashboard, Package, CheckCircle, TrendingUp, MapPin, Clock, User } from 'lucide-react';
 import DashboardLayout from '../../components/DashboardLayout';
 import Notification from '../../components/Notification';
 import { supabase } from '../../services/supabaseClient';
@@ -24,19 +24,16 @@ const AvailableDonations = () => {
   const fetchAvailableDonations = async () => {
     const { data, error } = await supabase
       .from('donations')
-      .select(`
-        *,
-        profiles (
-          name,
-          phone
-        )
-      `)
+      .select('*')
       .eq('status', 'available')
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
-      setDonations(data);
+    if (error) {
+      console.log(error);
+      return;
     }
+
+    setDonations(data);
   };
 
   const handleAccept = async (id, foodType) => {
@@ -88,14 +85,7 @@ const AvailableDonations = () => {
               <div className="donation-detail">
                 <User size={18} color="#6b7280" />
                 <span>
-                  Donor: {donation.profiles?.name || 'Unknown'}
-                </span>
-              </div>
-
-              <div className="donation-detail">
-                <Phone size={18} color="#6b7280" />
-                <span>
-                  Contact: {donation.profiles?.phone || 'Not provided'}
+                  Donor: {donation.donor_name || 'Unknown'}
                 </span>
               </div>
 
